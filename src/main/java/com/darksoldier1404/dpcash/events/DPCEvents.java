@@ -6,6 +6,7 @@ import com.darksoldier1404.dpcash.functions.CommonFunction;
 import com.darksoldier1404.dpcash.functions.ShopFunction;
 import com.darksoldier1404.dpcash.obj.Shop;
 import com.darksoldier1404.dppc.api.inventory.DInventory;
+import com.darksoldier1404.dppc.events.dinventory.DInventoryClickEvent;
 import com.darksoldier1404.dppc.utils.Triple;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -34,75 +35,71 @@ public class DPCEvents implements Listener {
     }
 
     @EventHandler
-    public void onInventoryClick(InventoryClickEvent e) {
-        if (e.getClickedInventory() == null) return;
-        if (e.getClickedInventory().getHolder() == null) return;
-        if (e.getClickedInventory().getHolder() instanceof DInventory) {
-            DInventory inv = (DInventory) e.getClickedInventory().getHolder();
-            Player p = (Player) e.getWhoClicked();
-            if (inv.isValidHandler(plugin)) {
-                Shop shop = ShopFunction.getShop(inv.getObj().toString());
-                ItemStack item = e.getCurrentItem();
-                if (item != null && item.getType().isAir()) {
-                    return;
-                }
-                ClickType clickType = e.getClick();
-                if (inv.isValidChannel(0)) {
-                    e.setCancelled(true);
-                    switch (shop.getType()) {
-                        case CASH:
-                            if (clickType == ClickType.LEFT) {
-                                ShopFunction.buyItem(p, shop.getName(), inv.getCurrentPage(), e.getSlot(), Currency.CASH);
-                            } else if (clickType == ClickType.RIGHT) {
-                                ShopFunction.sellItem(p, shop.getName(), inv.getCurrentPage(), e.getSlot(), Currency.CASH);
-                            }
-                            break;
-                        case MILEAGE:
-                            if (clickType == ClickType.LEFT) {
-                                ShopFunction.buyItem(p, shop.getName(), inv.getCurrentPage(), e.getSlot(), Currency.MILEAGE);
-                            } else if (clickType == ClickType.RIGHT) {
-                                ShopFunction.sellItem(p, shop.getName(), inv.getCurrentPage(), e.getSlot(), Currency.MILEAGE);
-                            }
-                            break;
-                        case HYBRID:
-                            if (clickType == ClickType.LEFT) {
-                                ShopFunction.buyItem(p, shop.getName(), inv.getCurrentPage(), e.getSlot(), Currency.CASH);
-                            } else if (clickType == ClickType.RIGHT) {
-                                ShopFunction.sellItem(p, shop.getName(), inv.getCurrentPage(), e.getSlot(), Currency.CASH);
-                            } else if (clickType == ClickType.SHIFT_LEFT) {
-                                ShopFunction.buyItem(p, shop.getName(), inv.getCurrentPage(), e.getSlot(), Currency.MILEAGE);
-                            } else if (clickType == ClickType.SHIFT_RIGHT) {
-                                ShopFunction.sellItem(p, shop.getName(), inv.getCurrentPage(), e.getSlot(), Currency.MILEAGE);
-                            }
-                            break;
-                    }
-                    return;
-                }
-                if (inv.isValidChannel(1)) {
-                    return;
-                }
-                if (inv.isValidChannel(2)) {
-                    if (e.getClickedInventory() != null && e.getClickedInventory().getType() != InventoryType.PLAYER) {
-                        e.setCancelled(true);
+    public void onInventoryClick(DInventoryClickEvent e) {
+        DInventory inv = e.getDInventory();
+        Player p = (Player) e.getWhoClicked();
+        if (inv.isValidHandler(plugin)) {
+            Shop shop = ShopFunction.getShop(inv.getObj().toString());
+            ItemStack item = e.getCurrentItem();
+            if (item != null && item.getType().isAir()) {
+                return;
+            }
+            ClickType clickType = e.getClick();
+            if (inv.isValidChannel(0)) {
+                e.setCancelled(true);
+                switch (shop.getType()) {
+                    case CASH:
                         if (clickType == ClickType.LEFT) {
-                            if (shop.getType() == ShopType.MILEAGE) {
-                                p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_only_mileage_price_setting"));
-                                return;
-                            }
-                            currentEdit.put(p.getUniqueId(), Triple.of(e.getSlot(), inv, Currency.CASH));
+                            ShopFunction.buyItem(p, shop.getName(), inv.getCurrentPage(), e.getSlot(), Currency.CASH);
                         } else if (clickType == ClickType.RIGHT) {
-                            if (shop.getType() == ShopType.CASH) {
-                                p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_only_cash_price_setting"));
-                                return;
-                            }
-                            currentEdit.put(p.getUniqueId(), Triple.of(e.getSlot(), inv, Currency.MILEAGE));
-                        } else {
-                            p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_price_setting_click_guide"));
+                            ShopFunction.sellItem(p, shop.getName(), inv.getCurrentPage(), e.getSlot(), Currency.CASH);
+                        }
+                        break;
+                    case MILEAGE:
+                        if (clickType == ClickType.LEFT) {
+                            ShopFunction.buyItem(p, shop.getName(), inv.getCurrentPage(), e.getSlot(), Currency.MILEAGE);
+                        } else if (clickType == ClickType.RIGHT) {
+                            ShopFunction.sellItem(p, shop.getName(), inv.getCurrentPage(), e.getSlot(), Currency.MILEAGE);
+                        }
+                        break;
+                    case HYBRID:
+                        if (clickType == ClickType.LEFT) {
+                            ShopFunction.buyItem(p, shop.getName(), inv.getCurrentPage(), e.getSlot(), Currency.CASH);
+                        } else if (clickType == ClickType.RIGHT) {
+                            ShopFunction.sellItem(p, shop.getName(), inv.getCurrentPage(), e.getSlot(), Currency.CASH);
+                        } else if (clickType == ClickType.SHIFT_LEFT) {
+                            ShopFunction.buyItem(p, shop.getName(), inv.getCurrentPage(), e.getSlot(), Currency.MILEAGE);
+                        } else if (clickType == ClickType.SHIFT_RIGHT) {
+                            ShopFunction.sellItem(p, shop.getName(), inv.getCurrentPage(), e.getSlot(), Currency.MILEAGE);
+                        }
+                        break;
+                }
+                return;
+            }
+            if (inv.isValidChannel(1)) {
+                return;
+            }
+            if (inv.isValidChannel(2)) {
+                if (e.getClickedInventory() != null && e.getClickedInventory().getType() != InventoryType.PLAYER) {
+                    e.setCancelled(true);
+                    if (clickType == ClickType.LEFT) {
+                        if (shop.getType() == ShopType.MILEAGE) {
+                            p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_only_mileage_price_setting"));
                             return;
                         }
-                        p.closeInventory();
+                        currentEdit.put(p.getUniqueId(), Triple.of(e.getSlot(), inv, Currency.CASH));
+                    } else if (clickType == ClickType.RIGHT) {
+                        if (shop.getType() == ShopType.CASH) {
+                            p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_only_cash_price_setting"));
+                            return;
+                        }
+                        currentEdit.put(p.getUniqueId(), Triple.of(e.getSlot(), inv, Currency.MILEAGE));
+                    } else {
+                        p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_price_setting_click_guide"));
                         return;
                     }
+                    p.closeInventory();
+                    return;
                 }
             }
         }
