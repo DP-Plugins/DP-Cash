@@ -7,6 +7,7 @@ import com.darksoldier1404.dpcash.functions.ShopFunction;
 import com.darksoldier1404.dpcash.obj.Shop;
 import com.darksoldier1404.dppc.api.inventory.DInventory;
 import com.darksoldier1404.dppc.events.dinventory.DInventoryClickEvent;
+import com.darksoldier1404.dppc.events.dinventory.DInventoryCloseEvent;
 import com.darksoldier1404.dppc.utils.Triple;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -106,15 +107,12 @@ public class DPCEvents implements Listener {
     }
 
     @EventHandler
-    public void onInventoryClose(InventoryCloseEvent e) {
-        if (e.getInventory().getHolder() instanceof DInventory) {
-            Player p = (Player) e.getPlayer();
-            DInventory inv = (DInventory) e.getInventory().getHolder();
-            if (inv.isValidHandler(plugin)) {
-                if (inv.getChannel() == 1) {
-                    ShopFunction.saveShopItems(p, inv);
-                    return;
-                }
+    public void onInventoryClose(DInventoryCloseEvent e) {
+        Player p = (Player) e.getPlayer();
+        DInventory inv = e.getDInventory();
+        if (inv.isValidHandler(plugin)) {
+            if (inv.getChannel() == 1) {
+                ShopFunction.saveShopItems(p, inv);
             }
         }
     }
