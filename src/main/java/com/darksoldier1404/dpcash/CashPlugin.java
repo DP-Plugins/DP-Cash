@@ -8,6 +8,7 @@ import com.darksoldier1404.dpcash.events.DPCEvents;
 import com.darksoldier1404.dpcash.functions.CommonFunction;
 import com.darksoldier1404.dpcash.obj.CashUser;
 import com.darksoldier1404.dpcash.obj.Shop;
+import com.darksoldier1404.dppc.annotation.DPPCoreVersion;
 import com.darksoldier1404.dppc.api.inventory.DInventory;
 import com.darksoldier1404.dppc.data.DPlugin;
 import com.darksoldier1404.dppc.data.DataContainer;
@@ -20,6 +21,7 @@ import java.util.UUID;
 
 import static com.darksoldier1404.dppc.utils.PluginUtil.addPlugin;
 
+@DPPCoreVersion(since = "5.3.0")
 public class CashPlugin extends DPlugin {
     public static CashPlugin plugin;
     public static DataContainer<UUID, CashUser> udata;
@@ -39,8 +41,8 @@ public class CashPlugin extends DPlugin {
     public void onLoad() {
         init();
         addPlugin(plugin, 26291);
-        udata = loadDataContainer(new DataContainer<>(plugin, DataType.CUSTOM, "users"));
-        shops = loadDataContainer(new DataContainer<>(this, DataType.CUSTOM, "shops"), Shop.class);
+        udata = loadDataContainer(new DataContainer<>(plugin, DataType.CUSTOM, "users"), CashUser.class);
+        shops = loadDataContainer(new DataContainer<>(plugin, DataType.CUSTOM, "shops"), Shop.class);
         CommonFunction.initPlaceholders();
         saveDataContainer();
     }

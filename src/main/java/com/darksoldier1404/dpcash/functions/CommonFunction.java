@@ -69,6 +69,7 @@ public class CommonFunction {
     }
 
     public static void initUser(Player p) {
+        if (udata.containsKey(p.getUniqueId())) return;
         UUID uuid = p.getUniqueId();
         CashUser cu = new CashUser(uuid).deserialize(ConfigUtils.initUserData(plugin, uuid.toString(), "users"));
         if (cu == null) {
@@ -80,7 +81,6 @@ public class CommonFunction {
 
     public static void saveUserAndQuit(Player p) {
         saveUser(p.getUniqueId());
-        udata.remove(p.getUniqueId());
     }
 
     public static void saveUser(UUID uuid) {

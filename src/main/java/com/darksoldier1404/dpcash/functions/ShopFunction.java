@@ -6,10 +6,8 @@ import com.darksoldier1404.dpcash.obj.Shop;
 import com.darksoldier1404.dpcash.obj.ShopPrices;
 import com.darksoldier1404.dppc.api.inventory.DInventory;
 import com.darksoldier1404.dppc.utils.InventoryUtils;
-import com.darksoldier1404.dppc.utils.NBT;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.Nullable;
@@ -17,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static com.darksoldier1404.dpcash.CashPlugin.*;
 
@@ -41,7 +40,9 @@ public class ShopFunction {
         data.set("size", size);
         data.set("type", type.name());
         Shop shop = new Shop(shopName, plugin.getLang().getWithArgs("shop_title", shopName), size, type);
-        shop.setInventory(new DInventory(plugin.getLang().getWithArgs("shop_title", shopName), size * 9, true, plugin));
+        DInventory inv = new DInventory(plugin.getLang().getWithArgs("shop_title", shopName), size * 9, true, true, plugin);
+        inv.applyDefaultPageTools();
+        shop.setInventory(inv);
         shops.put(shopName, shop);
         saveShops();
         p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_msg_create_success", shopName, String.valueOf(size), type.name()));
@@ -70,14 +71,12 @@ public class ShopFunction {
         }
         Shop shop = shops.get(name);
         DInventory inv = shop.getInventory().clone();
-        inv.updateTitle(shop.getTitle());
         inv.setObj(name);
         inv.setChannel(0);
         inv.setCurrentPage(0);
         inv.applyAllItemChanges(
-                item -> applyPlaceholderForPriceSetting(shop, item)
+                (Consumer<DInventory.PageItemSet>) item -> applyPlaceholderForPriceSetting(shop, item)
         );
-        inv.setPageTools(getPageTools());
         inv.update();
         inv.openInventory(p);
     }
@@ -88,11 +87,9 @@ public class ShopFunction {
             return;
         }
         DInventory inv = shops.get(name).getInventory().clone();
-        inv.updateTitle(plugin.getLang().getWithArgs("shop_item_setting_title", name));
         inv.setObj(name);
         inv.setChannel(1);
         inv.setCurrentPage(0);
-        inv.setPageTools(getPageTools());
         inv.update();
         inv.openInventory(p);
     }
@@ -111,29 +108,6 @@ public class ShopFunction {
         p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_msg_save_success"));
     }
 
-    public static ItemStack[] getPageTools() {
-        ItemStack pane = new ItemStack(org.bukkit.Material.BLACK_STAINED_GLASS_PANE);
-        ItemMeta meta = pane.getItemMeta();
-        meta.setDisplayName(" ");
-        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-        pane.setItemMeta(meta);
-        pane = NBT.setStringTag(pane, "dpcash.clickcancel", "true");
-        ItemStack nextPage = new ItemStack(org.bukkit.Material.ARROW);
-        ItemMeta nextMeta = nextPage.getItemMeta();
-        nextMeta.setDisplayName("§aNext Page");
-        nextMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-        nextPage.setItemMeta(nextMeta);
-        nextPage = NBT.setStringTag(NBT.setStringTag(nextPage, "dpcash.clickcancel", "true"), "dpcash.nextpage", "true");
-        ItemStack prevPage = new ItemStack(org.bukkit.Material.ARROW);
-        ItemMeta prevMeta = prevPage.getItemMeta();
-        prevMeta.setDisplayName("§aPrevious Page");
-        prevMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-        prevPage.setItemMeta(prevMeta);
-        prevPage = NBT.setStringTag(NBT.setStringTag(prevPage, "dpcash.clickcancel", "true"), "dpcash.prevpage", "true");
-        return new ItemStack[]{pane, prevPage, pane, pane, pane, pane, pane, nextPage, pane};
-    }
-
-
     public static void openShopPriceSetting(Player p, String name) {
         if (!isShopExists(name)) {
             p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_err_not_exist", name));
@@ -144,9 +118,8 @@ public class ShopFunction {
         inv.setObj(name);
         inv.setChannel(2);
         inv.applyAllItemChanges(
-                item -> applyPlaceholderForPriceSetting(shop, item)
+                (Consumer<DInventory.PageItemSet>) item -> applyPlaceholderForPriceSetting(shop, item)
         );
-        inv.setPageTools(getPageTools());
         inv.update();
         inv.openInventory(p);
     }

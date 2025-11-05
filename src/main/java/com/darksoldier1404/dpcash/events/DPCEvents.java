@@ -6,7 +6,6 @@ import com.darksoldier1404.dpcash.functions.CommonFunction;
 import com.darksoldier1404.dpcash.functions.ShopFunction;
 import com.darksoldier1404.dpcash.obj.Shop;
 import com.darksoldier1404.dppc.api.inventory.DInventory;
-import com.darksoldier1404.dppc.utils.NBT;
 import com.darksoldier1404.dppc.utils.Triple;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -48,22 +47,6 @@ public class DPCEvents implements Listener {
                     return;
                 }
                 ClickType clickType = e.getClick();
-                if (NBT.hasTagKey(item, "dpcash.prevpage")) {
-                    inv.applyChanges();
-                    inv.prevPage();
-                    e.setCancelled(true);
-                    return;
-                }
-                if (NBT.hasTagKey(item, "dpcash.nextpage")) {
-                    inv.applyChanges();
-                    inv.nextPage();
-                    e.setCancelled(true);
-                    return;
-                }
-                if (NBT.hasTagKey(item, "dpcash.clickcancel")) {
-                    e.setCancelled(true);
-                    return;
-                }
                 if (inv.isValidChannel(0)) {
                     e.setCancelled(true);
                     switch (shop.getType()) {

@@ -160,7 +160,7 @@ public class Shop implements DataCargo {
                 }
             }
         }
-        DInventory inventory = new DInventory(title, size * 9, true, plugin);
+        DInventory inventory = new DInventory(title, size * 9, true, true, plugin);
         inventory = inventory.deserialize(data);
         return new Shop(name, title, size, type, inventory, prices);
     }
