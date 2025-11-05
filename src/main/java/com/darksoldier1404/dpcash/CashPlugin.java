@@ -44,7 +44,7 @@ public class CashPlugin extends DPlugin {
         udata = loadDataContainer(new DataContainer<>(plugin, DataType.CUSTOM, "users"), CashUser.class);
         shops = loadDataContainer(new DataContainer<>(plugin, DataType.CUSTOM, "shops"), Shop.class);
         CommonFunction.initPlaceholders();
-        saveDataContainer();
+        saveAllData();
     }
 
     @Override
@@ -57,6 +57,6 @@ public class CashPlugin extends DPlugin {
 
     @Override
     public void onDisable() {
-        saveDataContainer();
+        saveAllData();
     }
 }
