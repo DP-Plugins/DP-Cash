@@ -24,7 +24,6 @@ public class CashFunction {
         user.setCurrentCash(user.getCurrentCash() + amount);
         user.setTotalCashEarned(user.getTotalCashEarned() + amount);
         CommonFunction.saveUser(user.getUUID());
-        udata.put(player.getUniqueId(), user);
         sender.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("cash_msg_given", String.valueOf(amount), player.getName()));
         if (player.isOnline()) {
             player.getPlayer().sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("cash_msg_received", String.valueOf(amount)));
@@ -52,7 +51,6 @@ public class CashFunction {
         user.setCurrentCash(user.getCurrentCash() - amount);
         user.setTotalCashSpent(user.getTotalCashSpent() + amount);
         CommonFunction.saveUser(user.getUUID());
-        udata.put(player.getUniqueId(), user);
         sender.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("cash_msg_taken", String.valueOf(amount), player.getName()));
         if (player.isOnline()) {
             player.getPlayer().sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("cash_msg_lost", String.valueOf(amount)));
@@ -76,7 +74,6 @@ public class CashFunction {
         user.setCurrentMileage(user.getCurrentMileage() + amount);
         user.setTotalMileageEarned(user.getTotalMileageEarned() + amount);
         CommonFunction.saveUser(user.getUUID());
-        udata.put(player.getUniqueId(), user);
         sender.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("mileage_msg_given", String.valueOf(amount), player.getName()));
         if (player.isOnline()) {
             player.getPlayer().sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("mileage_msg_received", String.valueOf(amount)));
@@ -104,7 +101,6 @@ public class CashFunction {
         user.setCurrentMileage(user.getCurrentMileage() - amount);
         user.setTotalMileageSpent(user.getTotalMileageSpent() + amount);
         CommonFunction.saveUser(user.getUUID());
-        udata.put(player.getUniqueId(), user);
         sender.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("mileage_msg_taken", String.valueOf(amount), player.getName()));
         if (player.isOnline()) {
             player.getPlayer().sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("mileage_msg_lost", String.valueOf(amount)));
@@ -127,7 +123,6 @@ public class CashFunction {
         }
         user.setCurrentCash(amount);
         CommonFunction.saveUser(user.getUUID());
-        udata.put(player.getUniqueId(), user);
         sender.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("cash_msg_set", player.getName(), String.valueOf(amount)));
         if (player.isOnline()) {
             player.getPlayer().sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("cash_msg_set_self", String.valueOf(amount)));
@@ -150,7 +145,6 @@ public class CashFunction {
         }
         user.setCurrentMileage(amount);
         CommonFunction.saveUser(user.getUUID());
-        udata.put(player.getUniqueId(), user);
         sender.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("mileage_msg_set", player.getName(), String.valueOf(amount)));
         if (player.isOnline()) {
             player.getPlayer().sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("mileage_msg_set_self", String.valueOf(amount)));
@@ -171,7 +165,6 @@ public class CashFunction {
         user.setTotalCashEarned(0);
         user.setTotalCashSpent(0);
         CommonFunction.saveUser(user.getUUID());
-        udata.put(player.getUniqueId(), user);
         sender.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("cash_msg_reset", player.getName()));
         if (player.isOnline()) {
             player.getPlayer().sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("cash_msg_reset_self"));
@@ -192,7 +185,6 @@ public class CashFunction {
         user.setTotalMileageEarned(0);
         user.setTotalMileageSpent(0);
         CommonFunction.saveUser(user.getUUID());
-        udata.put(player.getUniqueId(), user);
         sender.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("mileage_msg_reset", player.getName()));
         if (player.isOnline()) {
             player.getPlayer().sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("mileage_msg_reset_self"));

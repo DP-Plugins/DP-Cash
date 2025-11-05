@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectSettingsService">
+    <option name="localesDirectory" value="C:\Users\user\IdeaProjects\DP-Cash\src\main\resources\lang" />
+    <option name="parserStrategy" value="YML" />
+    <option name="filePattern" value="*.yml" />
+    <option name="includeSubDirs" value="true" />
+    <option name="defaultNamespace" value="" />
+  </component>
+</project>

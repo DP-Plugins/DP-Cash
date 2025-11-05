@@ -59,8 +59,8 @@ public class CashShopCommand {
         });
         builder.addSubCommand("reload", "dpcash.admin", plugin.getLang().get("cashshop_cmd_reload"), (p, args) -> {
             if (args.length == 1) {
-                plugin.saveDataContainerWithoutConfig();
                 plugin.reload();
+                plugin.saveDataContainer();
             } else {
                 p.sendMessage(plugin.getPrefix() + plugin.getLang().get("cashshop_cmd_reload_usage"));
             }
